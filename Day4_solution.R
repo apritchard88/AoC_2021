@@ -44,9 +44,6 @@ while(i < tot_rows){
   
 }
 
-
-
-
 # function to look for the number in the dataframe and change it to another value if found
 change_val <- function(df, number, value){
     df[df == number] <- value
@@ -87,8 +84,7 @@ find_win <- function(df, num_list){
 
 num_list <- str_split(nums,",") # this is the list of called numbers
 current_min <- length(num_list[[1]]) # set the starting winning point (the maximum)
-
-current_max <- 1
+current_max <- 1 # to find the worst card, start from minimum calls
 for(i in 1:length(cards)){
   this_card <- cards[[i]]
   this_win <- find_win(this_card, num_list)
@@ -96,6 +92,7 @@ for(i in 1:length(cards)){
     winning_card <- this_card
     current_min <- this_win
   }
+  # add a second section to return the card that comes last
   if(this_win > current_max){
     losing_card <- this_card
     current_max <- this_win
