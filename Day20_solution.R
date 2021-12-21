@@ -83,6 +83,9 @@ next_df <- scanner_df_list[[2]]
 
 find_overlap <- function(this_df, next_df){
   all_diffs <- c()
+  xdiffs <- c()
+  ydiffs <- c()
+  zdiffs <- c()
   possible_xyz <- c('xyz','xzy','yxz','yzx','zxy','zyx')
   possible_dir <- c('+++', '++-', '+--', '+-+', '---', '--+', '-+-', '-++')
   for(xyz in possible_xyz){
@@ -99,30 +102,72 @@ find_overlap <- function(this_df, next_df){
           d <- paste0(xdiff, ",", ydiff, ",", zdiff)
           if(!str_detect(d, 'NA')){
             all_diffs <- append(all_diffs, d)
+            xdiffs <- append(xdiffs, xdiff)
+            ydiffs <- append(ydiffs, ydiff)
+            zdiffs <- append(zdiffs, zdiff)
           }
         }
       }
-      overlaps <- as.data.frame(all_diffs, stringsAsFactors = FALSE) %>% 
-        group_by(all_diffs) %>% 
+      overlaps <- as.data.frame(all_diffs, stringsAsFactors = FALSE) 
+      
+      overlaps[['x']] <- xdiffs
+      overlaps[['y']] <- ydiffs
+      overlaps[['z']] <- zdiffs
+      
+      #overlaps[[paste0(substring(xyz,1,1),"_2")]] <- xdiffs
+      #overlaps[[paste0(substring(xyz,2,2),"_2")]] <- ydiffs
+      #overlaps[[paste0(substring(xyz,3,3),"_2")]] <- zdiffs
+      
+      overlaps <- overlaps %>% 
+        group_by(all_diffs, x, y, z) %>% 
         summarise(n=n()) %>% 
         arrange(-n) %>%
         filter(n >= 12)
       if(nrow(overlaps)>0){
-        print(xyz)
-        print(dir)
-        print(overlaps)
+        overlaps <- overlaps %>%
+          ungroup %>%
+          select(x,y,z)
+        overlaps[['xmap']] <- c(substring(xyz,1,1))
+        overlaps[['ymap']] <- c(substring(xyz,2,2))
+        overlaps[['zmap']] <- c(substring(xyz,3,3))
+        #print(xyz)
+        #print(dir)
+        #print(overlaps)
         return(overlaps)
       }else{
         all_diffs <- c()
+        xdiffs <- c()
+        ydiffs <- c()
+        zdiffs <- c()
       }
     }
   }
   return(NA)
 }
 
-this_df <- scanner_df_list[[5]]
-next_df <- scanner_df_list[[1]]
-find_overlap(this_df,next_df)
+#next_df <- scanner_df_list[[5]]
+#this_df <- scanner_df_list[[2]]
+#find_overlap(this_df,next_df)
+
+all_overlaps <- data.frame(x=c(), y=c(), z=c(), xmap=c(), ymap=c(), zmap=c(), scanner_1=c(), scanner_2=c())
+all_scanner_2 <- 1:length(scanner_df_list)
+for(i in 1:length(scanner_df_list)){
+  for(j in all_scanner_2){
+    if(j>i){
+      this_df <- scanner_df_list[[i]]
+      next_df <- scanner_df_list[[j]]
+      this_overlap <- find_overlap(this_df, next_df)
+      print(this_overlap)
+      if(!is.na(this_overlap)){
+        this_overlap[['scanner_1']] <- c(i)
+        this_overlap[['scanner_2']] <- c(j)
+        all_overlaps <- rbind(all_overlaps, this_overlap)
+        # now we found a link to this scanner 2, remove it from the list
+        #all_scanner_2 <- all_scanner_2[all_scanner_2!=j]
+      }
+    }
+  }
+}
 
 
 ### add individual columns for x y z
