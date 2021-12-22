@@ -1,6 +1,6 @@
 library(tidyverse)
 
-day20_data <- readLines("Day20_practice.txt")
+day20_data <- readLines("Day19_data.txt")
 
 scanner_starts <- c()
 scanner_ends <- c()
@@ -39,8 +39,8 @@ for(i in 1:length(all_scanners)){
   scanner_df_list[[scanner]] <- df
 }
 
-this_df <- scanner_df_list[[1]]
-next_df <- scanner_df_list[[2]]
+#this_df <- scanner_df_list[[1]]
+#next_df <- scanner_df_list[[2]]
 
 #this_df$x <- as.numeric(as.character(this_df$x))
 #this_df$y <- as.numeric(as.character(this_df$y))
@@ -53,33 +53,33 @@ next_df <- scanner_df_list[[2]]
 #                   yd = y2-y,
 #                   zd = z2-z)
 
-all_diffs <- c()
-for(i in 1:nrow(this_df)){
-  for(j in 1:nrow(next_df)){
-    xdiff <- this_df[j,1] + next_df[i,1]
-    ydiff <- this_df[j,2] - next_df[i,2]
-    zdiff <- this_df[j,3] + next_df[i,3]
-    
-    d <- paste0(xdiff, ",", ydiff, ",", zdiff)
-    if(!str_detect(d, 'NA')){
-      all_diffs <- append(all_diffs, d)
-    }
-    
-  }
-}
-
-as.data.frame(all_diffs, stringsAsFactors = FALSE) %>% 
-  group_by(all_diffs) %>% 
-  summarise(n=n()) %>% 
-  arrange(-n)
+# all_diffs <- c()
+# for(i in 1:nrow(this_df)){
+#   for(j in 1:nrow(next_df)){
+#     xdiff <- this_df[j,1] + next_df[i,1]
+#     ydiff <- this_df[j,2] - next_df[i,2]
+#     zdiff <- this_df[j,3] + next_df[i,3]
+#     
+#     d <- paste0(xdiff, ",", ydiff, ",", zdiff)
+#     if(!str_detect(d, 'NA')){
+#       all_diffs <- append(all_diffs, d)
+#     }
+#     
+#   }
+# }
+# 
+# as.data.frame(all_diffs, stringsAsFactors = FALSE) %>% 
+#   group_by(all_diffs) %>% 
+#   summarise(n=n()) %>% 
+#   arrange(-n)
 
 
 # xyz, xzy, yxz, yzx, zxy, zyx -> probably only need first 3, others are same but backwards?
 # +++, ++-, +--, +-+, ---, --+, -+-, -++
 # can use eval(parse(text="this_df[j,1]+next_df[i,1]")) to build command dynamically
 
-this_df <- scanner_df_list[[1]]
-next_df <- scanner_df_list[[2]]
+#this_df <- scanner_df_list[[1]]
+#next_df <- scanner_df_list[[2]]
 
 find_overlap <- function(this_df, next_df){
   all_diffs <- c()
@@ -169,7 +169,7 @@ for(i in 1:length(scanner_df_list)){
   }
 }
 
-
+write_csv(all_overlaps, "Day19_data_overlaps.csv")
 ### add individual columns for x y z
 # name according to the xyz ordering that found the overlap
 # add columns showing the 2 dfs that were compared
