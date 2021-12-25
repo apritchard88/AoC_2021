@@ -1,0 +1,47 @@
+Solved this puzzle by hand as it was not too difficult
+Should probably have a go at coding it at some point though given that is the whole idea...
+
+PART 1
+--------------
+A=18 =    18
+B=13 =   130
+C=10 =  1000
+D=13 = 13000
+
+== 14148
+
+#############
+#...........#
+###A#B#C#D###
+  #A#B#C#D#
+  #########
+
+PART 2
+---------------
+A=44 =    44
+B=37 =   370
+C=44 =  4400
+D=39 = 39000
+
+== 43814
+
+#############
+#...........#
+###A#B#C#D###
+  #A#B#C#D#
+  #A#B#C#D#
+  #A#B#C#D#
+  #########
+
+------------
+
+
+
+
+#############
+#...........#
+###D#A#C#D###
+  #D#C#B#A#
+  #D#B#A#C#
+  #B#C#B#A#
+  #########
