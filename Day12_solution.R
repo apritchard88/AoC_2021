@@ -125,4 +125,5 @@ count_paths <- function(start_node, visited, doubled){
 }
 
 visited_nodes <- c()
-answer_pt2 <- count_paths('start',visited_nodes, FALSE)
+answer_pt1 <- count_paths('start', visited_nodes, TRUE)
+answer_pt2 <- count_paths('start',visited_nodes, FALSE) # this takes a while to run
